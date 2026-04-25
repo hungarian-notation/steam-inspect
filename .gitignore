@@ -1,0 +1,11 @@
+**/build/
+**/bin/
+
+.gradle
+.gradletasknamecache
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+gradle-app.setting
+
+.vscode

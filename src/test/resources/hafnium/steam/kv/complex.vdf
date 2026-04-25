@@ -1,0 +1,35 @@
+// Tokenizer Oddities
+
+// A lot of this is guesswork, but if we do encounter a 
+// document that breaks boring convention we don't want 
+// to stumble at the first hurdle.
+
+// For example, Steam will happily read VDF files with 
+// unquoted values, but it normalizes them back to
+// quoted values immediately.
+
+// There is exactly one vdf file in my local installation 
+// with a comment, but one is more than none.
+
+"things" 
+
+{
+    "0" {
+        name  "thing0" // {THIS IS A COMMENT}
+    }
+
+    "1" {
+        name // another comment
+        "thing1"
+    }
+
+    "2" {}
+}
+
+string "
+
+multiline"
+
+🤖 \U0001F916 // same thing twice
+
+"more things" no

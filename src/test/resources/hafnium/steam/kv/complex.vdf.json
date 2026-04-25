@@ -1,0 +1,14 @@
+{
+    "things": {
+        "0": {
+            "name": "thing0"
+        },
+        "1": {
+            "name": "thing1"
+        },
+        "2": {}
+    },
+    "string": "\n\nmultiline",
+    "🤖": "🤖",
+    "more things": "no"
+}
