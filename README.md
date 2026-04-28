@@ -8,6 +8,6 @@ On Windows, the main Steam installation location is located empirically by inspe
 
 Once SteamInspect discovers the User's primary Steam library, it can follow metadata to the rest of the Steam installation locations on the machine, enumerating all installed games, their installation directories, and their downloaded workshop items.
 
-Steam stores very little locally in its own formats about workshop items. To get even the name of a mod, I suspect I'd have to individually support every game's custom mod file structure. In lieu of that nightmare, I have implemented a client for Steam's Web API that Most of the endpoints require some level of authentication, so we are currently only interfacing with the workshop, querying workshop details from the `ISteamRemoteStorage/GetPublishedFileDetails` method.
+Steam stores very little locally in its own formats about workshop items. To get even the name of a mod, I suspect I'd have to individually support every game's custom mod file structure. In lieu of that nightmare, I have implemented a client for Steam's Web API. Most of the endpoints require some level of authentication, so we are currently only querying workshop details from the `ISteamRemoteStorage/GetPublishedFileDetails` method. The API offers responses in the same VDF/KeyValue format we're already handling for the local metadata, so we don't require a runtime dependency on a JSON parser.
 
 The networking implementation now implements a simple cache, governed by the `expires` directives returned from the API.  
