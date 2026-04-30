@@ -104,23 +104,51 @@ tasks.register('integrationTest', Test) {
     }
 }
 
+final def jshPath = project.layout.buildDirectory.dir('jsh')
+
+tasks.register("copyJsh", Copy) {
+    from ("src/main/jshell" ) {
+        include "*.jsh"
+    }
+    into jshPath
+}
+
+tasks.register("jnaCopyJsh", Copy) {
+    from ("src/jna/jshell") {
+        include "*.jsh"
+    }
+    into jshPath
+}
 
 tasks.register("jshell") {
+    dependsOn tasks.named("copyJsh")
+    dependsOn tasks.named("compileJava")
+    dependsOn tasks.named("shadowJar").map { dep -> dep.archiveFile }
+
+
+    def jsh = jshPath.get().file("main.jsh")
     dependsOn tasks.named("shadowJar").map { dep -> dep.archiveFile }
     def shadowJarPath = shadowJar.archiveFile.get()
-        
+    
     doLast {
-        new ProcessBuilder('cmd', '/c', 'start', 'cmd.exe', '/c', "jshell.exe --class-path=${shadowJarPath} --enable-native-access=ALL-UNNAMED ").start()
+        new ProcessBuilder('cmd', '/c', 'start', 'cmd.exe', '/k', "jshell.exe --class-path=${shadowJarPath} ${jsh}").start()
     }
 }
 
 tasks.register("jnaJshell") {
+
+    dependsOn tasks.named("jnaCopyJsh")
+    dependsOn tasks.named("compileJava")
+    dependsOn tasks.named("jnaClasses")
+
+    def jsh = jshPath.get().file("jna.jsh")
+
     dependsOn tasks.named("shadowJar").map { dep -> dep.archiveFile }
     dependsOn tasks.named("jnaShadowJar").map { dep -> dep.archiveFile }
     def shadowJarPath = shadowJar.archiveFile.get()
     def jnaShadowJar = jnaShadowJar.archiveFile.get()
         
     doLast {
-        new ProcessBuilder('cmd', '/c', 'start', 'cmd.exe', '/c', "jshell.exe --class-path=${shadowJarPath};${jnaShadowJar} --enable-native-access=ALL-UNNAMED ").start()
+        new ProcessBuilder('cmd', '/c', 'start', 'cmd.exe', '/k', "jshell.exe --class-path=${shadowJarPath};${jnaShadowJar} --enable-native-access=ALL-UNNAMED ${jsh}").start()
     }
 }
